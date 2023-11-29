@@ -55,6 +55,6 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         push: true
-        tags: acraksproduction.azurecr.io/votingappfrontend:${{ github.sha }}
+        tags: acraksproductionflux.azurecr.io/votingappfrontend:${{ github.sha }}
         file: app/voting-app-frontend/Dockerfile
         context: app/voting-app-frontend
