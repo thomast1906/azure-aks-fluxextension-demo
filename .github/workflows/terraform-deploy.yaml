@@ -1,0 +1,60 @@
+name: 'Terraform Deploy'
+ 
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+  
+jobs:
+  terraform:
+    uses: ./.github/workflows/template-terraform.yaml
+    strategy:
+      matrix:
+        environment: ['production']
+        platform_directory: ['core']
+      fail-fast: true
+      max-parallel: 1
+    with:
+      environment: ${{ matrix.environment }}
+      backend_tf_rg: thomasthorntoncloud
+      backend_tf_sa: thomasthorntontfstate
+      backend_tfstate_name: ${{ matrix.environment }}-tf-githubaksflux${{ matrix.platform_directory }}
+      tfstate_container: github-aksflux-${{ matrix.environment }}
+      platform_directory: ${{ matrix.platform_directory }}
+    secrets:
+      CLIENT_ID: ${{ secrets.CLIENT_ID }}
+      CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+      SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
+      TENANT_ID: ${{ secrets.TENANT_ID }}
+      DEPLOYMENT_SUBSCRIPTION_ID: ${{ secrets.DEPLOYMENT_SUBSCRIPTION_ID }}
+
+  docker_build_push_acr:
+    name: 'Docker Build and Push to ACR'
+    runs-on: ubuntu-latest
+    environment: production
+  
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+        shell: bash
+  
+  #   steps:
+  #   # Checkout the repository to the GitHub Actions runner
+  #   - name: Checkout
+  #     uses: actions/checkout@v2
+  
+  #   - name: 'Docker Login'
+  #     uses: azure/docker-login@v1
+  #     with:
+  #       login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+  #       username: ${{ secrets.REGISTRY_USERNAME }}
+  #       password: ${{ secrets.REGISTRY_PASSWORD }}
+ 
+  #   - name: Build the frontend image and push it to ACR
+  #     uses: docker/build-push-action@v2
+  #     with:
+  #       push: true
+  #       tags: acraksproduction.azurecr.io/votingappfrontend:${{ github.sha }}
+  #       file: app/voting-app-frontend/Dockerfile
+  #       context: app/voting-app-frontend
