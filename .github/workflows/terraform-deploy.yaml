@@ -29,15 +29,15 @@ jobs:
       TENANT_ID: ${{ secrets.TENANT_ID }}
       DEPLOYMENT_SUBSCRIPTION_ID: ${{ secrets.DEPLOYMENT_SUBSCRIPTION_ID }}
 
-  docker_build_push_acr:
-    name: 'Docker Build and Push to ACR'
-    runs-on: ubuntu-latest
-    environment: production
+  # docker_build_push_acr:
+  #   name: 'Docker Build and Push to ACR'
+  #   runs-on: ubuntu-latest
+  #   environment: production
   
-    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
-    defaults:
-      run:
-        shell: bash
+  #   # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+  #   defaults:
+  #     run:
+  #       shell: bash
   
   #   steps:
   #   # Checkout the repository to the GitHub Actions runner
