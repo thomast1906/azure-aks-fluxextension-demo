@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         environment: ['production']
-        platform_directory: ['core']
+        platform_directory: ['core','network']
       fail-fast: true
       max-parallel: 1
     with:
